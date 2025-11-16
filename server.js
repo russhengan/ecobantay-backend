@@ -157,8 +157,6 @@ app.use("/api", adminRoutes);
 // 16. Handle reports 
 const reportRoutes = require("./routes/reports");
 app.use(reportRoutes);
-app.use("/uploads", express.static("uploads"));
-
 
 // 17. Handle pickup request
 const pickupRoutes = require("./routes/pickups");
@@ -202,6 +200,7 @@ app.use('/api/leaderboard', leaderboardRoutes);
 const newsRoutes = require("./routes/newsRoutes");
 app.use("/api/news", newsRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads/news", express.static(path.join(__dirname, "uploads/news")));
 
 // 28. For truck inventory 
 app.use('/api/truck-logs', require('./routes/truckLogs'));

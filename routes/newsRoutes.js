@@ -5,76 +5,80 @@ const path = require("path");
 const router = express.Router();
 const News = require("../models/News");
 
-// Setup multer to store uploaded images in /uploads/news/
+// Setup multer for uploads/news folder
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/news/");
+    cb(null, path.join(__dirname, "../uploads/news"));
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
+    const uniqueName = Date.now() + "-" + file.originalname.replace(/\s+/g, "_");
+    cb(null, uniqueName);
   },
 });
 const upload = multer({ storage });
 
-// 📌 POST route with image upload
-router.post("/create", upload.single("image"), async (req, res) => {
+// CREATE NEWS
+router.post("/", upload.single("image"), async (req, res) => {
   try {
-    console.log("📝 Body:", req.body);
-    console.log("📷 File:", req.file);
-
     const { title, content } = req.body;
-    const imageUrl = req.file ? `/uploads/news/${req.file.filename}` : "";
+
+    const imageUrl = req.file
+      ? `/uploads/news/${req.file.filename}`
+      : null;
 
     const news = await News.create({ title, content, imageUrl });
+
     res.status(201).json(news);
   } catch (err) {
-    console.error("❌ Error posting news:", err.message);
-    res.status(500).json({ message: "Failed to post news", error: err.message });
+    console.error("❌ Error creating news:", err);
+    res.status(500).json({ message: "Failed to create news" });
   }
 });
 
-
-// 📌 GET route to fetch all news
+// GET ALL NEWS
 router.get("/", async (req, res) => {
   try {
-    const news = await News.find().sort({ createdAt: -1 });
-    res.json(news);
+    const newsList = await News.find().sort({ createdAt: -1 });
+    res.json(newsList);
   } catch (err) {
-    res.status(500).json({ message: "Failed to fetch news", error: err.message });
+    res.status(500).json({ message: "Failed to fetch news" });
   }
 });
 
-router.delete("/:id", async (req, res) => {
-  try {
-    await News.findByIdAndDelete(req.params.id);
-    res.json({ message: "News deleted successfully." });
-  } catch (err) {
-    res.status(500).json({ message: "Failed to delete news", error: err.message });
-  }
-});
-
-// Get specific news by ID
+// GET NEWS BY ID
 router.get("/:id", async (req, res) => {
   try {
     const news = await News.findById(req.params.id);
     res.json(news);
   } catch (err) {
-    res.status(500).json({ message: "Failed to fetch news item", error: err.message });
+    res.status(500).json({ message: "Failed to fetch news item" });
   }
 });
 
-// Update news
+// UPDATE NEWS
 router.put("/:id", async (req, res) => {
   try {
     const { title, content } = req.body;
-    const news = await News.findByIdAndUpdate(
+
+    const updated = await News.findByIdAndUpdate(
       req.params.id,
       { title, content },
       { new: true }
     );
-    res.json(news);
+
+    res.json(updated);
   } catch (err) {
-    res.status(500).json({ message: "Failed to update news", error: err.message });
+    res.status(500).json({ message: "Failed to update news" });
+  }
+});
+
+// DELETE NEWS
+router.delete("/:id", async (req, res) => {
+  try {
+    await News.findByIdAndDelete(req.params.id);
+    res.json({ message: "News deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete news" });
   }
 });
 
