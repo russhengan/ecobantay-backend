@@ -147,7 +147,7 @@ app.use((err, req, res, next) => {
 // 14. Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Server running on http://10.27.141.108:${PORT}`);
+  console.log(`🚀 Server running on http://ecobantay-backend.onrender.com`);
 });
 
 // 15. Admin routes
@@ -201,7 +201,7 @@ app.use('/api/leaderboard', leaderboardRoutes);
 // 27. Handle news creation
 const newsRoutes = require("./routes/newsRoutes");
 app.use("/api/news", newsRoutes);
-app.use("/uploads/news", express.static(path.join(__dirname, "uploads/news")));
+app.use('/uploads', express.static('uploads'));
 
 // 28. For truck inventory 
 app.use('/api/truck-logs', require('./routes/truckLogs'));

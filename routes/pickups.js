@@ -21,7 +21,7 @@ const upload = multer({ storage: storage });
 router.post("/api/pickups/create", upload.array('images', 2), async (req, res) => {
   try {
     const { type, location } = req.body;
-    const imagePaths = req.files.map(file => `http://10.27.141.108:5000/uploads/${file.filename}`);
+    const imagePaths = req.files.map(file => `http://ecobantay-backend.onrender.com/uploads/${file.filename}`);
 
     const newPickup = new Pickup({
       type,

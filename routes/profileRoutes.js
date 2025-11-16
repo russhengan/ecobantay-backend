@@ -23,7 +23,7 @@ router.post("/upload-profile", upload.single("profilePicture"), async (req, res)
         const { userId } = req.body; // Get user ID from request
         if (!userId) return res.status(400).json({ message: "User ID is required" });
 
-        const imageUrl = `http://10.27.141.108:5000/uploads/${req.file.filename}`;
+        const imageUrl = `http://ecobantay-backend.onrender.com/uploads/${req.file.filename}`;
 
         // Update user profile picture in MongoDB
         await User.findByIdAndUpdate(userId, { profilePicture: imageUrl });

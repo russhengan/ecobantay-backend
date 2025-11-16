@@ -25,7 +25,7 @@ router.post('/generate', async (req, res) => {
 
     try {
         // Generate the full validation URL for the QR
-        const validationUrl = `http://10.27.141.108:5000/api/qr/validate?data=${encryptedData}`;
+        const validationUrl = `http://ecobantay-backend.onrender.com/api/qr/validate?data=${encryptedData}`;
 
         // Generate the QR Code with the URL embedded
         const qrCodeDataUrl = await QRCode.toDataURL(validationUrl);
