@@ -201,7 +201,7 @@ app.use('/api/leaderboard', leaderboardRoutes);
 // 27. Handle news creation
 const newsRoutes = require("./routes/newsRoutes");
 app.use("/api/news", newsRoutes);
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // 28. For truck inventory 
 app.use('/api/truck-logs', require('./routes/truckLogs'));
